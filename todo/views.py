@@ -7,9 +7,27 @@ from todo.models import Task
 
 def index(request):
     if request.method == 'POST':
-        task = Task(title=request.POST['title'],
-                    due_at=make_aware(parse_datetime(request.POST['due_at'])))
+        # <...>の部分を正しい取得方法に変えています
+        title = request.POST['title']
+        due_at_raw = request.POST['due_at']
+        priority_raw = request.POST.get('priority', 1)  # priority欄がなければ1に
+
+        # due_atの処理
+        if due_at_raw:
+            due_at = make_aware(parse_datetime(due_at_raw))
+        else:
+            due_at = None
+
+        try:
+            priority = int(priority_raw)
+        except ValueError:
+            priority = 1  # 変な入力は1
+
+        # Priorityの指定も忘れずに
+        task = Task(title=title, priority=priority, due_at=due_at)
         task.save()
+        # ↓登録後リダイレクトで2重POST防止
+        return redirect('index')
 
     if request.GET.get('order') == 'due':
         tasks = Task.objects.order_by('due_at')
@@ -65,3 +83,18 @@ def update(request, task_id):
         'task': task
     }
     return render(request, "todo/edit.html", context)
+
+
+def priority(request, task_id):
+    if request.method == 'POST':
+        task = Task(title=request.POST['priority'],
+                    due_at=make_aware(parse_datetime(request.POST['due_at'])))
+        task.save()
+
+    if request.GET.get('order') == 'due':
+        tasks = Task.objects.order_by('priority')
+
+    context = {
+        'tasks': tasks
+    }
+    return render(request, 'todo/index.html', context)

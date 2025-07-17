@@ -53,7 +53,6 @@ class TaskModekTestCase(TestCase):
 
         self.assertFalse(task.is_overdue(current))
 
-
 class TodoViewsTestCase(TestCase):
     def test_index_get(self):
         client = Client()
@@ -65,8 +64,8 @@ class TodoViewsTestCase(TestCase):
 
     def test_index_post(self):
         client = Client()
-        data = {'title': 'Test Task', 'due_at': '2024-06-30 23:59:59'}
-        response = client.post('/', data)
+        data = {'title': 'Test Task', "priority": 3, 'due_at': '2024-06-30 23:59:59'}
+        response = self.client.post('/', data, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name, 'todo/index.html')
@@ -113,3 +112,4 @@ class TodoViewsTestCase(TestCase):
         response = client.get('/1/')
 
         self.assertEqual(response.status_code, 404)
+
