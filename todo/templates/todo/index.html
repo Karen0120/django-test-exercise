@@ -39,6 +39,7 @@
     {% for task in tasks %}
     <div class="text">
       <h2><a href="{% url 'detail' task.id %}">{{ task.title }}</a></h2>
+      <h3>{{ task.comment }}</h3>
       <ul>
         <li>Posted at: {{ task.posted_at }}</li>
         {% if task.due_at %} 
