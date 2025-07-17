@@ -13,6 +13,8 @@ def index(request):
 
     if request.GET.get('order') == 'due':
         tasks = Task.objects.order_by('due_at')
+    elif request.GET.get('order') == 'comp':
+        tasks = Task.objects.order_by('completed')
     else:
         tasks = Task.objects.order_by('-posted_at')
 
