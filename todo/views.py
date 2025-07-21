@@ -22,14 +22,18 @@ def index(request):
             priority = 1
 
         task = Task(title=title, priority=priority, due_at=due_at)
+        task = Task(title=request.POST['title'], comment=request.POST.get('comment', ''),
+                    due_at=make_aware(parse_datetime(request.POST['due_at'])))
         task.save()
         return redirect('index')
 
     if request.GET.get('order') == 'due':
         tasks = Task.objects.order_by('due_at')
+    elif request.GET.get('order') == 'comp':
+        tasks = Task.objects.order_by('completed')
     else:
         tasks = Task.objects.order_by('-posted_at')
-
+        
     context = {
         'tasks': tasks
     }
@@ -71,6 +75,7 @@ def update(request, task_id):
         raise Http404("Task does not exist")
     if request.method == 'POST':
         task.title = request.POST['title']
+        task.comment = request.POST.get('comment', '')
         task.due_at = make_aware(parse_datetime(request.POST['due_at']))
         task.save()
         return redirect(detail, task_id)

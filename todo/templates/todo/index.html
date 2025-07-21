@@ -6,6 +6,7 @@
     <title>To Do Application</title>
     <meta charset="UTF-8">
     <meta name="author" content="INIAD">
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
   </head>
 
   <body>
@@ -20,6 +21,8 @@
       <div>
         <label for="priorityInput">Priority:</label><br>
         <input id="priorityInput" name="priority" type="text">
+        <label for="commentInput">Comment</label><br>
+        <input id="commentInput" name="comment" type="text" placeholder="Input commnet">
       </div>
       <div>
         <label for="dueInput">Due at:</label><br>
@@ -35,11 +38,14 @@
       <a href="{% url 'index' %}?order=due">Sort by Due Date</a> |
       <a href="{% url 'index' %}?order=post">Sort by Posted Date</a>|
       <a href="{% url 'index' %}?order=priority">Sort by Priority</a>
+      <a href="{% url 'index' %}?order=post">Sort by Posted Date</a>
+      <a href="{% url 'index' %}?order=comp">Sort by completed or no</a>
     </div>
 
     {% for task in tasks %}
     <div class="text">
       <h2><a href="{% url 'detail' task.id %}">{{ task.title }}</a></h2>
+      <h3>{{ task.comment }}</h3>
       <ul>
         <li>Posted at: {{ task.posted_at }}</li>
         <li>Priority: {{ task.priority }}</li>
