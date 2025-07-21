@@ -53,6 +53,7 @@ class TaskModekTestCase(TestCase):
 
         self.assertFalse(task.is_overdue(current))
 
+
 class TodoViewsTestCase(TestCase):
     def test_index_get(self):
         client = Client()
@@ -112,4 +113,3 @@ class TodoViewsTestCase(TestCase):
         response = client.get('/1/')
 
         self.assertEqual(response.status_code, 404)
-

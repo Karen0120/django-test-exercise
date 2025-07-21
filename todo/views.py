@@ -33,7 +33,7 @@ def index(request):
         tasks = Task.objects.order_by('completed')
     else:
         tasks = Task.objects.order_by('-posted_at')
-        
+
     context = {
         'tasks': tasks
     }
@@ -51,6 +51,7 @@ def detail(request, task_id):
         }
     return render(request, 'todo/detail.html', context)
 
+
 def close(request, task_id):
     try:
         task = Task.objects.get(pk = task_id)
@@ -59,7 +60,8 @@ def close(request, task_id):
     task.completed = True
     task.save()
     return redirect(index)
-  
+
+
 def delete(request, task_id):
     try:
         task = Task.objects.get(pk=task_id)
@@ -67,7 +69,8 @@ def delete(request, task_id):
         raise Http404('Task does not exist')
     task.delete()
     return redirect(index)
-  
+
+
 def update(request, task_id):
     try:
         task = Task.objects.get(pk=task_id)
@@ -79,7 +82,7 @@ def update(request, task_id):
         task.due_at = make_aware(parse_datetime(request.POST['due_at']))
         task.save()
         return redirect(detail, task_id)
-    
+
     context = {
         'task': task
     }
