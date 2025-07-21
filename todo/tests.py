@@ -66,7 +66,7 @@ class TodoViewsTestCase(TestCase):
     def test_index_post(self):
         client = Client()
         data = {'title': 'Test Task', "priority": 3, 'due_at': '2024-06-30 23:59:59'}
-        response = self.client.post('/', data, follow=True)
+        response = client.post('/', data, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name, 'todo/index.html')
